@@ -1,0 +1,1039 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Eat@Home</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;500;600&family=Cairo:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+/* Layout: white editorial blog copied from the supplied template. Header with search, thin nav, full-width hero with an overlapping white feature card, then a three-column recipe grid. Square edges, yellow accent used only for actions. Single light look on purpose, like the template. Arabic mirrors the whole layout (dir=rtl) with Naskh headings and Cairo body text. */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --card: #ffffff;
+  --ink: #1d1d20;
+  --muted: #6e6e75;
+  --line: #ebebed;
+  --tint: #f2f2f3;
+  --accent: #fbe45c;
+  --accent-ink: #1d1d20;
+  --p-bg: #eeeeef;
+  --p-dish: #ffffff;
+  --p-ring: #e4e4e6;
+  --p-dot: #7c7c82;
+  --serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+  --sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --script: 'Mrs Saint Delafield', 'Brush Script MT', cursive;
+}
+:root[dir="rtl"] {
+  --serif: 'Noto Naskh Arabic', 'Merriweather', 'Traditional Arabic', Georgia, serif;
+  --sans: 'Cairo', 'Montserrat', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.65; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+svg.i { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.wrap { max-width: 887px; margin-inline: auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+.top { display: grid; grid-template-columns: auto minmax(200px, 1fr) auto; gap: 20px; align-items: center; padding-block: 22px; }
+.logo { position: relative; display: block; justify-self: start; }
+.logo .word { font-size: 25px; font-weight: 400; letter-spacing: 0.06em; line-height: 1; white-space: nowrap; display: block; direction: ltr; }
+.search { display: flex; align-items: stretch; background: var(--tint); padding: 3px; max-width: 420px; width: 100%; justify-self: center; }
+.sel { position: relative; display: flex; align-items: center; }
+.sel select { appearance: none; -webkit-appearance: none; background: transparent; border: 0; padding-block: 0; padding-inline: 14px 28px; height: 100%; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; max-width: 130px; }
+.sel svg { position: absolute; inset-inline-end: 10px; pointer-events: none; width: 11px; height: 11px; }
+.search input { flex: 1; min-width: 0; border: 0; background: var(--card); padding: 11px 14px; font-size: 12px; margin-inline-start: 2px; }
+.search input::placeholder { color: var(--muted); }
+.search .go { width: 44px; border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; }
+.search .go svg { width: 15px; height: 15px; }
+.tools { display: flex; align-items: center; gap: 12px; }
+.admin-tag { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--tint); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 8px; white-space: nowrap; }
+.admin-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 1px var(--ink); }
+.tool:has(+ .add:not([hidden])) { padding-inline-end: 12px; border-inline-end: 1px solid var(--line); }
+.nav .star { display: inline-block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; vertical-align: top; margin-block: -2px 0; margin-inline: 4px 0; }
+.tool { display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; font-size: 12px; padding: 6px 0; white-space: nowrap; }
+.tool[aria-pressed="true"] { font-weight: 600; }
+.tool[aria-pressed="true"] svg { fill: currentColor; }
+.lang { font-weight: 600; border: 1px solid var(--line); padding: 6px 10px; }
+.lang:hover { border-color: var(--ink); }
+.add { display: inline-flex; align-items: center; gap: 8px; border: 0; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 14px; white-space: nowrap; }
+.nav { display: flex; gap: 30px; border-top: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav a { font-size: 10.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 22px 0 20px 0; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.nav a[aria-current="page"] { border-bottom-color: var(--accent); }
+.nav a:hover { border-bottom-color: var(--line); }
+.nav a[aria-current="page"]:hover { border-bottom-color: var(--accent); }
+
+/* hero */
+.hero { position: relative; background: var(--p-bg); min-height: 410px; overflow: hidden; margin-top: 0; }
+.hero-media { position: absolute; inset: 0; }
+.hero-media img, .hero-media svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-inner { position: relative; padding-block: 72px; }
+.hero-card { background: var(--card); width: min(366px, 100%); padding: 34px 26px 26px; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.meta span { display: inline-flex; align-items: center; gap: 6px; }
+.meta svg { color: var(--muted); }
+.hero-card h1 { font-family: var(--serif); font-weight: 400; font-size: 36px; line-height: 1.17; letter-spacing: -0.01em; margin: 18px 0 14px; text-wrap: balance; }
+.hero-card p.lead { color: var(--muted); font-size: 12.5px; margin: 0 0 24px; }
+.hero-card .cta { display: inline-block; margin-bottom: 22px; }
+
+/* byline */
+.byline { display: flex; align-items: center; gap: 12px; }
+.av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #2a2a2e; flex: none; }
+.by-name { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.5; }
+.by-date { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+.actions { margin-inline-start: auto; display: flex; gap: 8px; }
+.icon-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); display: grid; place-items: center; color: var(--ink); }
+.icon-btn:hover { border-color: var(--muted); }
+.icon-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.icon-btn[aria-pressed="true"] svg { fill: currentColor; }
+
+/* sections */
+main { min-height: 40vh; }
+.section { padding-block: 56px 20px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 26px; }
+.section-head h2 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.25; margin: 0; letter-spacing: -0.01em; }
+.label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.more { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid var(--accent); padding-bottom: 2px; white-space: nowrap; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; }
+.card { min-width: 0; display: flex; flex-direction: column; }
+.card-img { position: relative; display: block; flex: none; width: 100%; aspect-ratio: 262 / 182; background: var(--p-bg); overflow: hidden; margin-bottom: 20px; }
+.card-img > img, .card-img > svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.badge svg { position: static; width: 12px; height: 12px; }
+.badge { position: absolute; top: 0; inset-inline-start: 0; background: var(--accent); color: var(--accent-ink); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.card h3 { font-family: var(--serif); font-weight: 400; font-size: 18px; line-height: 1.45; margin: 14px 0 10px; text-wrap: balance; }
+.card h3 a:hover, .hero-card h1 a:hover { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: 4px; }
+.excerpt { color: var(--muted); font-size: 12px; margin: 0 0 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card .byline { margin-top: auto; }
+
+/* categories + chips */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.chip { border: 1px solid var(--line); background: var(--card); font-size: 10.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 14px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.tile { text-align: start; border: 1px solid var(--line); background: var(--card); padding: 26px 22px 22px; display: flex; flex-direction: column; gap: 22px; min-height: 130px; }
+.tile:hover { border-color: var(--ink); }
+.tile b { font-family: var(--serif); font-weight: 400; font-size: 20px; line-height: 1.3; }
+.tile small { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: auto; }
+.video { display: flex; align-items: center; gap: 18px; background: var(--ink); color: #ffffff; padding: 18px 22px; margin: 0 0 14px; max-width: 460px; }
+.video-url { margin: 0 0 40px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.video-url .ghost { padding: 7px 12px; }
+.video:hover { background: #000000; }
+.video .play { width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; flex: none; }
+.video .play svg { width: 18px; height: 18px; margin-left: 2px; }
+.video b { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.video small { font-size: 11px; opacity: 0.75; }
+.chip-label { align-self: center; margin-inline-end: 6px; color: var(--muted); }
+.chips.cuisine { margin-top: -18px; }
+.all { margin: 44px 0 0; text-align: center; }
+.a-text { font-size: 13px; color: var(--muted); margin: 0 0 20px; max-width: 52ch; line-height: 1.7; }
+.adminlink { border: 0; background: none; padding: 0; font-size: 11px; letter-spacing: 0.04em; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.adminlink[data-on="1"] { color: var(--ink); font-weight: 600; text-decoration: none; }
+.adminlink[data-on="1"]::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-inline-end: 8px; }
+.empty { border: 1px dashed var(--muted); padding: 44px 24px; text-align: center; color: var(--muted); }
+.empty h3 { font-family: var(--serif); font-weight: 400; font-size: 20px; color: var(--ink); margin: 0 0 8px; }
+.empty p { margin: 0 auto 20px; max-width: 46ch; font-size: 12.5px; }
+.empty .add { margin-inline: auto; }
+.note { background: var(--tint); font-size: 11.5px; padding: 10px 14px; margin-top: 28px; color: var(--muted); }
+.note.tr { margin: 0 0 28px; }
+
+/* recipe page */
+.crumb { display: inline-flex; align-items: center; gap: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 28px; }
+.detail { padding-block: 40px 20px; }
+.detail h1 { font-family: var(--serif); font-weight: 400; font-size: 38px; line-height: 1.25; letter-spacing: -0.01em; margin: 18px 0 20px; text-wrap: balance; max-width: 22ch; }
+.detail .byline { max-width: 460px; margin-bottom: 30px; }
+.detail-img { position: relative; aspect-ratio: 16 / 8; max-height: 460px; width: 100%; background: var(--p-bg); overflow: hidden; margin-bottom: 36px; }
+.detail-img img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.detail-lead { font-family: var(--serif); font-size: 16px; line-height: 1.8; max-width: 62ch; margin: 0 0 40px; color: var(--ink); }
+.cols { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 48px; align-items: start; }
+.box { background: var(--tint); padding: 26px 24px; }
+.box h2, .steps-wrap h2 { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 18px; }
+.ing { list-style: none; margin: 0; padding: 0; }
+.ing li { padding: 9px 0; border-bottom: 1px solid var(--line); }
+.ing li:last-child { border-bottom: 0; }
+.ing label { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: calc(13px * var(--fs, 1)); }
+.textsize { display: flex; align-items: center; gap: 8px; margin: 0 0 22px; }
+.textsize .label { margin-inline-end: 6px; }
+.textsize .ghost { min-width: 44px; padding: 9px 12px; font-size: 12px; letter-spacing: 0; }
+.ing input { margin-top: 5px; accent-color: var(--ink); }
+.ing input:checked + span { text-decoration: line-through; color: var(--muted); }
+.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 26px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 16px; font-size: calc(14px * var(--fs, 1)); line-height: 1.8; }
+.steps li::before { content: counter(s); width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+.owner-bar { display: flex; gap: 10px; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.ghost { border: 1px solid var(--line); background: var(--card); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 11px 16px; }
+.ghost:hover { border-color: var(--ink); }
+.ghost:disabled { opacity: 0.55; cursor: default; }
+.ghost.danger { color: #b3261e; }
+.about p { font-family: var(--serif); font-size: 16px; line-height: 1.85; max-width: 60ch; margin: 0 0 18px; }
+.stats { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); }
+.stats div b { display: block; font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stats div span { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+footer { margin-top: 80px; border-top: 1px solid var(--line); padding-block: 28px 40px; font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; letter-spacing: 0.04em; }
+
+/* modal form */
+#modal { position: fixed; inset: 0; z-index: 50; background: rgba(12, 12, 14, 0.6); overflow-y: auto; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.panel { background: var(--card); max-width: 720px; margin: 24px auto; padding: 32px 30px 28px; }
+.panel h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 24px; }
+.field { display: grid; gap: 7px; margin-bottom: 18px; min-width: 0; }
+.field > label, .field > .lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.field small { color: var(--muted); font-size: 11px; }
+.field input[type="text"], .field input[type="number"], .field input[type="password"], .field select, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--card); padding: 11px 12px; font-size: 13px; border-radius: 0; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--ink); outline-offset: 0; border-color: var(--ink); }
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pair > div { display: grid; gap: 5px; min-width: 0; align-content: start; }
+.pair .sub { font-size: 11px; font-weight: 600; color: var(--muted); }
+.trbar { background: var(--tint); padding: 14px 16px; margin: 0 0 22px; display: grid; gap: 10px; }
+.trbar p { margin: 0; font-size: 12px; color: var(--muted); }
+.trbar .btns { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.photo { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.photo img { width: 120px; height: 84px; object-fit: cover; display: block; }
+.check { display: flex; align-items: center; gap: 10px; font-size: 13px; margin-bottom: 22px; }
+.check input { accent-color: var(--ink); width: 16px; height: 16px; }
+.form-foot { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.err { color: #b3261e; font-size: 12px; margin: 0 0 14px; min-height: 0; }
+
+#toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); font-size: 12px; padding: 11px 18px; z-index: 60; max-width: min(90vw, 520px); overflow-wrap: anywhere; }
+
+/* Arabic (right-to-left) */
+:root[dir="rtl"] body { font-size: 15px; line-height: 1.8; }
+:root[dir="rtl"] * { letter-spacing: 0 !important; text-transform: none !important; }
+:root[dir="rtl"] .logo .word { letter-spacing: 0.06em !important; text-transform: none !important; }
+:root[dir="rtl"] .hero-media svg { transform: scaleX(-1); }
+:root[dir="rtl"] .crumb svg { transform: scaleX(-1); }
+:root[dir="rtl"] .hero-card h1, :root[dir="rtl"] .detail h1 { line-height: 1.5; }
+:root[dir="rtl"] .hero-card h1 { font-size: 34px; }
+:root[dir="rtl"] .card h3 { line-height: 1.7; font-size: 20px; }
+:root[dir="rtl"] .section-head h2 { line-height: 1.5; }
+:root[dir="rtl"] .meta, :root[dir="rtl"] .by-name, :root[dir="rtl"] .by-date, :root[dir="rtl"] .label, :root[dir="rtl"] .tile small, :root[dir="rtl"] .stats div span { font-size: 12px; }
+:root[dir="rtl"] .nav a, :root[dir="rtl"] .more, :root[dir="rtl"] .chip, :root[dir="rtl"] .ghost, :root[dir="rtl"] .add, :root[dir="rtl"] .crumb { font-size: 13px; }
+:root[dir="rtl"] .sel select, :root[dir="rtl"] .admin-tag, :root[dir="rtl"] .badge { font-size: 12px; }
+:root[dir="rtl"] .excerpt { font-size: 14px; }
+:root[dir="rtl"] .tool, :root[dir="rtl"] .search input { font-size: 13px; }
+:root[dir="rtl"] .field > label, :root[dir="rtl"] .field > .lbl { font-size: 12px; }
+:root[dir="rtl"] .field small, :root[dir="rtl"] .note, :root[dir="rtl"] .trbar p { font-size: 12.5px; }
+:root[dir="rtl"] .ing label { font-size: calc(15px * var(--fs, 1)); }
+:root[dir="rtl"] .steps li { font-size: calc(16px * var(--fs, 1)); }
+
+@media (max-width: 860px) {
+  .grid, .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) and (min-width: 641px) {
+  .top { grid-template-columns: minmax(0, 1fr) auto; gap: 16px 16px; }
+  .search { grid-column: 1 / -1; grid-row: 2; max-width: none; }
+}
+@media (max-width: 720px) {
+  .hero { min-height: 0; background: var(--bg); }
+  .hero-media { position: relative; height: 240px; }
+  .hero-inner { padding-block: 0 8px; margin-top: -44px; }
+  .hero-card { width: 100%; padding: 26px 22px 22px; }
+  .hero-card h1, :root[dir="rtl"] .hero-card h1 { font-size: 26px; }
+  .cols { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .detail h1 { font-size: 30px; }
+  .detail-img { aspect-ratio: 16 / 10; }
+  .section { padding-top: 40px; }
+  .tools { gap: 14px; }
+}
+@media (max-width: 640px) {
+  .top { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .logo { order: 1; }
+  .tools { order: 2; justify-content: space-between; flex-wrap: wrap; }
+  .search { order: 3; max-width: none; }
+}
+@media (max-width: 560px) {
+  .grid, .tiles { grid-template-columns: minmax(0, 1fr); }
+  .row, .row2, .pair { grid-template-columns: minmax(0, 1fr); }
+  .panel { padding: 24px 20px 22px; margin-block: 8px; }
+  .logo .word { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="wrap top">
+  <a class="logo" href="#home" aria-label="Eat@Home"><span class="word">EAT@HOME</span></a>
+  <form class="search" id="search-form" role="search">
+    <div class="sel"><select id="cat-select" aria-label="Cuisine"></select><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
+    <input id="q" type="search" placeholder="Search recipes…" aria-label="Search recipes" autocomplete="off" dir="auto">
+    <button class="go" id="go-btn" type="submit" aria-label="Search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
+  </form>
+  <div class="tools">
+    <button id="admin-tag" class="admin-tag" type="button" hidden><i aria-hidden="true"></i>Admin</button>
+    <button id="lang-btn" class="tool lang" type="button" lang="ar">العربية</button>
+    <button id="fav-btn" class="tool" type="button" aria-pressed="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg><span class="t-label" id="fav-label">Favorites</span> <span id="fav-count">(0)</span></button>
+    <button id="add-btn" class="add" type="button" hidden>Add recipe</button>
+  </div>
+</header>
+<div class="wrap">
+  <nav class="nav" id="nav" aria-label="Main">
+    <a href="#home" data-v="home">Home</a>
+    <a href="#categories" data-v="categories">Categories</a>
+    <a href="#recipes" data-v="recipes">Recipes<span class="star" aria-hidden="true"></span></a>
+    <a href="#about" data-v="about">About</a>
+  </nav>
+</div>
+
+<main id="view"></main>
+
+<footer class="wrap">
+  <span id="foot-brand">Eat@Home · With Karim Al Janobi</span>
+  <span><button id="admin-btn" class="adminlink" type="button">Admin login</button> · <span id="foot-count"></span></span>
+</footer>
+
+<div id="modal" hidden></div>
+<div id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  var CATS = ["Breakfast", "Lunch", "Dinner", "Dessert", "Snacks", "Drinks", "Tips & tricks"];
+  var CAT_AR = { "Breakfast": "الفطور", "Lunch": "الغداء", "Dinner": "العشاء", "Dessert": "الحلويات", "Snacks": "وجبات خفيفة", "Drinks": "المشروبات", "Tips & tricks": "نصائح وحيل" };
+  var LEVELS = ["Super easy", "Easy", "Medium", "Challenging"];
+  var LEVEL_AR = { "Super easy": "سهل جداً", "Easy": "سهل", "Medium": "متوسط", "Challenging": "صعب" };
+  var FS_LEVELS = [0.9, 1, 1.15, 1.3, 1.5, 1.75];
+  var CUISINES = ["American", "Chinese", "French", "Indian", "Italian", "Japanese", "Mediterranean", "Mexican", "Middle Eastern", "Thai", "Dessert", "Soup", "Beverages", "Khaleeji"];
+  var CUISINE_AR = { "American": "أمريكي", "Chinese": "صيني", "French": "فرنسي", "Indian": "هندي", "Italian": "إيطالي", "Japanese": "ياباني", "Mediterranean": "متوسطي", "Mexican": "مكسيكي", "Middle Eastern": "شرق أوسطي", "Thai": "تايلندي", "Dessert": "حلويات", "Soup": "شوربات", "Beverages": "مشروبات", "Khaleeji": "خليجي" };
+
+  /* every piece of text on the page: [English, Arabic] */
+  var S = {
+    home: ["Home", "الرئيسية"], categories: ["Categories", "التصنيفات"], recipes: ["Recipes", "الوصفات"], about: ["About", "عن المدونة"],
+    searchPh: ["Search recipes…", "ابحث عن وصفة…"], searchAria: ["Search recipes", "ابحث في الوصفات"], searchBtn: ["Search", "بحث"],
+    allCuisines: ["All cuisines", "كل المطابخ"], cuisineAria: ["Cuisine", "المطبخ"],
+    favorites: ["Favorites", "المفضلة"], addRecipe: ["Add recipe", "إضافة وصفة"],
+    admin: ["Admin", "المشرف"], adminLocked: ["Admin locked", "المشرف (مقفل)"], adminLogin: ["Admin login", "دخول المشرف"], adminIn: ["Admin · signed in", "المشرف · تم الدخول"],
+    footBrand: ["Eat@Home · With Karim Al Janobi", "Eat@Home · مع كريم الجنوبي"],
+    switchTo: ["Switch to Arabic", "التبديل إلى الإنجليزية"],
+    video: ["Video", "فيديو"], popular: ["Popular", "الأكثر شعبية"],
+    watch: ["Watch the video", "شاهد الفيديو"], opensOn: ["Opens on ", "يُفتح على "],
+    videoFallback: ["If the button does nothing, copy the link and open it yourself.", "إذا لم يعمل الزر، انسخ الرابط وافتحه بنفسك."], copyLink: ["Copy link", "نسخ الرابط"],
+    textSize: ["Text size", "حجم الخط"], textSizeAria: ["Text size for ingredients and method", "حجم خط المكونات وطريقة التحضير"],
+    smaller: ["Smaller text", "خط أصغر"], normal: ["Normal text size", "الحجم العادي"], larger: ["Larger text", "خط أكبر"],
+    aMinus: ["A−", "أ−"], aNorm: ["A", "أ"], aPlus: ["A+", "أ+"],
+    ingredients: ["Ingredients", "المكونات"], method: ["Method", "طريقة التحضير"],
+    editRecipe: ["Edit recipe", "تعديل الوصفة"], del: ["Delete", "حذف"], confirmDel: ["Confirm delete", "تأكيد الحذف"], keepIt: ["Keep it", "إبقاء"],
+    allRecipes: ["All recipes", "كل الوصفات"],
+    heroMineTitle: ["Your first recipe goes here", "وصفتك الأولى هنا"], heroPubTitle: ["Fresh from the kitchen", "طازجة من المطبخ"],
+    heroMineLead: ["Write down a dish you cook at home, with the ingredients and the steps, and it appears on this page.", "اكتب طبقاً تطبخه في بيتك مع مكوناته وخطواته، وستظهر وصفته في هذه الصفحة."],
+    heroPubLead: ["Recipes from the Eat@Home kitchen show up here as they are published.", "تظهر هنا وصفات مطبخ Eat@Home فور نشرها."],
+    addFirst: ["Add your first recipe", "أضف وصفتك الأولى"], addA: ["Add a recipe", "أضف وصفة"],
+    noRecipes: ["No recipes yet", "لا توجد وصفات بعد"],
+    noRecipesMine: ["Each recipe you add becomes a card here, with its photo, cooking time and difficulty.", "كل وصفة تضيفها تصبح بطاقة هنا مع صورتها ووقت تحضيرها ومستوى صعوبتها."],
+    noRecipesPub: ["Nothing has been published so far. Check back soon.", "لم يُنشر شيء حتى الآن. عد قريباً."],
+    localNote: ["Recipes you add here are saved in this browser only. Open the published page while signed in to keep them on the page for everyone.", "الوصفات التي تضيفها هنا تُحفظ في هذا المتصفح فقط. افتح الصفحة المنشورة وأنت مسجّل الدخول لتبقى الوصفات في الصفحة للجميع."],
+    yourFavs: ["Your favorites", "وصفاتك المفضلة"], nothingMatches: ["Nothing matches", "لا توجد نتائج مطابقة"],
+    tryOther: ["Try a different word, or clear the category and favorites filters.", "جرّب كلمة أخرى، أو أزل مرشّحات التصنيف والمفضلة."],
+    addFirstListed: ["Add your first recipe and it will be listed here.", "أضف وصفتك الأولى لتظهر هنا."],
+    searchPrefix: ["Search: ", "بحث: "], all: ["All", "الكل"], cuisineLabel: ["Cuisine", "المطبخ"],
+    aboutTitle: ["About Eat@Home", "عن Eat@Home"],
+    aboutText: ["Eat@Home is a maker blog of recipes cooked at home. Each one is written down with its ingredients and steps so it can be cooked again, and changed a little next time.", "Eat@Home مدونة صنّاع لوصفات تُطبخ في البيت. تُكتب كل وصفة بمكوناتها وخطواتها لتُطبخ مرة أخرى، ويُعدَّل فيها شيء بسيط في كل مرة."],
+    statRecipe: ["Recipe", "وصفة"], statRecipes: ["Recipes", "وصفات"], statCuisines: ["Cuisines in use", "مطابخ مستخدمة"],
+    notFound: ["Recipe not found", "الوصفة غير موجودة"], opening: ["Opening recipe", "جارٍ فتح الوصفة"],
+    notFoundText: ["This recipe may have been removed. The full list is under Recipes.", "ربما حُذفت هذه الوصفة. القائمة الكاملة في قسم الوصفات."], oneMoment: ["One moment.", "لحظة من فضلك."],
+    onlyIn: ["This recipe is only available in Arabic.", "هذه الوصفة متوفرة بالإنجليزية فقط حالياً."],
+    shareAria: ["Copy link to this recipe", "انسخ رابط هذه الوصفة"], favAria: ["Save to favorites", "أضف إلى المفضلة"],
+    linkCopied: ["Link copied", "تم نسخ الرابط"], copyThis: ["Copy this link: ", "انسخ هذا الرابط: "],
+    deleted: ["Recipe deleted", "تم حذف الوصفة"], deleteFail: ["Could not delete the recipe. Try again.", "تعذّر حذف الوصفة. حاول مرة أخرى."],
+    saved: ["Recipe saved", "تم حفظ الوصفة"],
+    noRoom: ["This browser has no room left to save recipes. Try a smaller photo.", "لا توجد مساحة كافية في هذا المتصفح لحفظ الوصفات. جرّب صورة أصغر."],
+    formEdit: ["Edit recipe", "تعديل الوصفة"], formAdd: ["Add a recipe", "إضافة وصفة"],
+    fTitle: ["Title", "العنوان"], fCat: ["Category", "الفئة"], fMin: ["Time in minutes", "الوقت بالدقائق"], fLevel: ["Difficulty", "مستوى الصعوبة"],
+    fCui: ["Cuisine", "المطبخ"], fCuiPh: ["Italian, Mexican, Thai…", "إيطالي، مكسيكي، تايلندي…"], fCuiHint: ["Pick one from the list or type your own.", "اختر من القائمة أو اكتب مطبخاً خاصاً بك."],
+    fSum: ["Short description", "وصف قصير"], fIng: ["Ingredients", "المكونات"], fSteps: ["Method", "طريقة التحضير"],
+    fIngHint: ["One ingredient per line.", "مكوّن واحد في كل سطر."], fStepsHint: ["One step per line. They are numbered for you.", "خطوة واحدة في كل سطر. تُرقَّم تلقائياً."],
+    fVideo: ["Video link", "رابط الفيديو"], fVideoPh: ["Paste a YouTube or TikTok link", "الصق رابط يوتيوب أو تيك توك"],
+    fVideoHint: ["Optional. YouTube or TikTok. The recipe page gets a Watch the video button that opens the video in a new tab.", "اختياري. يوتيوب أو تيك توك. تحصل صفحة الوصفة على زر «شاهد الفيديو» يفتح الفيديو في علامة تبويب جديدة."],
+    fPhoto: ["Photo", "الصورة"], fPhotoHint: ["Optional. Large photos are shrunk to fit.", "اختياري. تُصغَّر الصور الكبيرة تلقائياً."],
+    fByline: ["Byline", "اسم الكاتب"], fBylinePh: ["Your name", "اسمك"], fPop: ["Show a Popular badge on this recipe", "إظهار شارة «الأكثر شعبية» على هذه الوصفة"],
+    saveRecipe: ["Save recipe", "حفظ الوصفة"], cancel: ["Cancel", "إلغاء"], removePhoto: ["Remove photo", "إزالة الصورة"], choosePhoto: ["Choose a photo", "اختر صورة"], selPhoto: ["Selected photo", "الصورة المختارة"],
+    phTitleEn: ["Cheesy pasta with crispy bacon", "Cheesy pasta with crispy bacon"], phTitleAr: ["معكرونة بالجبن مع لحم مقدد مقرمش", "معكرونة بالجبن مع لحم مقدد مقرمش"],
+    phSumEn: ["One or two sentences that make someone want to cook it.", "One or two sentences that make someone want to cook it."], phSumAr: ["جملة أو جملتان تجعلان القارئ يرغب في طبخها.", "جملة أو جملتان تجعلان القارئ يرغب في طبخها."],
+    phIngEn: ["200 g spaghetti\n150 g bacon, diced\n2 cups grated mozzarella", "200 g spaghetti\n150 g bacon, diced\n2 cups grated mozzarella"],
+    phIngAr: ["200 غرام سباغيتي\n150 غراماً من اللحم المقدد، مقطعاً مكعبات\n2 كوب جبن موزاريلا مبشور", "200 غرام سباغيتي\n150 غراماً من اللحم المقدد، مقطعاً مكعبات\n2 كوب جبن موزاريلا مبشور"],
+    phStepsEn: ["Boil the pasta in salted water.\nFry the bacon until crisp.", "Boil the pasta in salted water.\nFry the bacon until crisp."],
+    phStepsAr: ["اسلق المعكرونة في ماء مملح.\nقلّ اللحم المقدد حتى يصبح مقرمشاً.", "اسلق المعكرونة في ماء مملح.\nقلّ اللحم المقدد حتى يصبح مقرمشاً."],
+    trHint: ["Write in one language and let Claude fill in the other. Read the translation before you save.", "اكتب بلغة واحدة ودع Claude يملأ اللغة الأخرى. اقرأ الترجمة قبل الحفظ."],
+    trToAr: ["Translate to Arabic", "ترجمة إلى العربية"], trToEn: ["Translate to English", "ترجمة إلى الإنجليزية"],
+    trBusy: ["Translating…", "جارٍ الترجمة…"], trDone: ["Translated. Check it before saving.", "تمت الترجمة. راجعها قبل الحفظ."],
+    trNeedEn: ["Write something in English first.", "اكتب شيئاً بالإنجليزية أولاً."], trNeedAr: ["Write something in Arabic first.", "اكتب شيئاً بالعربية أولاً."],
+    trDeclined: ["Claude is not allowed to translate on this page. Allow it and try again.", "لا يُسمح لـ Claude بالترجمة في هذه الصفحة. اسمح بذلك ثم حاول مرة أخرى."],
+    trRate: ["Too many requests. Try again in a minute.", "طلبات كثيرة. حاول مرة أخرى بعد دقيقة."],
+    trFail: ["The translation did not work. Try again.", "لم تنجح الترجمة. حاول مرة أخرى."],
+    errTitle: ["Give the recipe a title first.", "اكتب عنوان الوصفة أولاً."],
+    errVideo: ["That does not look like a YouTube or TikTok link. Paste the address from the video's page.", "هذا لا يبدو رابط يوتيوب أو تيك توك. الصق العنوان من صفحة الفيديو."],
+    errQuota: ["The page's storage is full. Delete a recipe or use a smaller photo.", "مساحة تخزين الصفحة ممتلئة. احذف وصفة أو استخدم صورة أصغر."],
+    errSave: ["The recipe could not be saved. Try again.", "تعذّر حفظ الوصفة. حاول مرة أخرى."],
+    errPhotoRead: ["That photo could not be read.", "تعذّرت قراءة الصورة."], errPhotoType: ["That file is not a photo this page can open.", "هذا الملف ليس صورة يمكن للصفحة فتحها."],
+    errPhotoBig: ["That photo is too detailed to store. Try a smaller one.", "هذه الصورة كبيرة التفاصيل ولا يمكن تخزينها. جرّب صورة أصغر."],
+    adminTitle: ["Admin", "المشرف"],
+    adminLocal: ["Admin sign-in works on the published page, signed in to claude.ai as the owner.", "يعمل دخول المشرف في الصفحة المنشورة بعد تسجيل الدخول إلى claude.ai بصفتك المالك."],
+    adminNoAccess: ["Only the blog owner and people given Editor access can add or change recipes. If that is you, sign in to claude.ai with that account and open this page again.", "يمكن لمالك المدونة ومن مُنح صلاحية المحرّر فقط إضافة الوصفات أو تعديلها. إن كنت أحدهم، سجّل الدخول إلى claude.ai بذلك الحساب ثم افتح هذه الصفحة من جديد."],
+    close: ["Close", "إغلاق"], adminChecking: ["Checking the admin lock. Try again in a moment.", "جارٍ التحقق من قفل المشرف. حاول بعد لحظة."],
+    adminPw: ["Admin password", "كلمة مرور المشرف"], unlock: ["Unlock", "فتح"],
+    adminOpen: ["Admin is unlocked. Lock it again when you step away, or change the password below.", "وضع المشرف مفتوح. أقفله عند ابتعادك، أو غيّر كلمة المرور أدناه."],
+    adminNoPw: ["No password is set yet. Set one and this page asks for it before the Add, Edit and Delete buttons appear.", "لم تُحدَّد كلمة مرور بعد. حدّد واحدة وستطلبها الصفحة قبل ظهور أزرار الإضافة والتعديل والحذف."],
+    newPw: ["New password", "كلمة مرور جديدة"], pw: ["Password", "كلمة المرور"], pwHint: ["At least 6 characters.", "6 أحرف على الأقل."], pwRepeat: ["Repeat password", "أعد كتابة كلمة المرور"],
+    changePw: ["Change password", "تغيير كلمة المرور"], setPw: ["Set password", "تعيين كلمة المرور"], lockNow: ["Lock now", "قفل الآن"], removePw: ["Remove password", "إزالة كلمة المرور"],
+    pwNote: ["This password is an extra lock on this page. Who is allowed to post is still set by the Share access you give people in claude.ai.", "كلمة المرور هذه قفل إضافي على هذه الصفحة. أما من يحق له النشر فيحدده من تمنحهم صلاحية المشاركة في claude.ai."],
+    tooMany: ["Too many tries. Wait a few seconds and try again.", "محاولات كثيرة. انتظر بضع ثوانٍ ثم حاول مجدداً."],
+    enterPw: ["Enter the admin password.", "أدخل كلمة مرور المشرف."], wrongPw: ["That password is not right.", "كلمة المرور غير صحيحة."],
+    pwCheckFail: ["The password could not be checked.", "تعذّر التحقق من كلمة المرور."], pwShort: ["Use at least 6 characters.", "استخدم 6 أحرف على الأقل."],
+    pwMismatch: ["The two passwords do not match.", "كلمتا المرور غير متطابقتين."], noCryptoSet: ["This browser cannot set a password here.", "لا يستطيع هذا المتصفح تعيين كلمة مرور هنا."],
+    noCryptoCheck: ["This browser cannot check passwords on this page.", "لا يستطيع هذا المتصفح التحقق من كلمات المرور في هذه الصفحة."],
+    pwSaveFail: ["The password could not be saved. Try again.", "تعذّر حفظ كلمة المرور. حاول مرة أخرى."], pwRemoveFail: ["The password could not be removed. Try again.", "تعذّرت إزالة كلمة المرور. حاول مرة أخرى."],
+    tUnlocked: ["Admin unlocked", "تم فتح وضع المشرف"], tLocked: ["Admin locked", "تم قفل وضع المشرف"], tPwSaved: ["Password saved", "تم حفظ كلمة المرور"], tPwRemoved: ["Password removed", "تمت إزالة كلمة المرور"]
+  };
+
+  var state = {
+    recipes: [], mode: "local", checked: false, canWrite: false, lock: null, lockLoaded: false, unlocked: false, fails: 0, until: 0,
+    q: "", cat: "", cuisine: "", fav: false, favs: {}, author: "", db: null, sample: null, lang: "en",
+    editing: null, img: "", saving: false, confirmDel: "", translating: false
+  };
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var view = $("#view"), modal = $("#modal"), toastEl = $("#toast");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+
+  /* language */
+  var saved = lsGet("eh-lang");
+  state.lang = saved === "ar" || saved === "en" ? saved : (/^ar/i.test(navigator.language || "") ? "ar" : "en");
+  function ar() { return state.lang === "ar"; }
+  function t(k) { var e = S[k]; return e ? e[ar() ? 1 : 0] : k; }
+  function catLabel(c) { return ar() ? (CAT_AR[c] || c) : c; }
+  function levelLabel(c) { return ar() ? (LEVEL_AR[c] || c) : c; }
+  function cuisineLabel(c) { return ar() ? (CUISINE_AR[c] || c) : c; }
+  function cuisineKey(input) {
+    input = String(input || "").trim(); if (!input) return "";
+    var low = input.toLowerCase(), i;
+    for (i = 0; i < CUISINES.length; i++) if (CUISINES[i].toLowerCase() === low || CUISINE_AR[CUISINES[i]] === input) return CUISINES[i];
+    return input;
+  }
+  function nRecipes(n) {
+    if (!ar()) return n + (n === 1 ? " recipe" : " recipes");
+    if (n === 1) return "وصفة واحدة";
+    if (n === 2) return "وصفتان";
+    return n + (n >= 3 && n <= 10 ? " وصفات" : n === 0 ? " وصفات" : " وصفة");
+  }
+  function pick(r, k) { var a = r[k + "Ar"], e = r[k]; return ar() ? (a || e || "") : (e || a || ""); }
+  function pickList(r, k) {
+    var a = r[k + "Ar"], e = r[k], A = Array.isArray(a) && a.length, E = Array.isArray(e) && e.length;
+    return ar() ? (A ? a : (E ? e : [])) : (E ? e : (A ? a : []));
+  }
+  function hasOwnLang(r) { return ar() ? !!r.titleAr : !!r.title; }
+
+  /* icons */
+  function icon(p, extra) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"' + (extra || "") + ">" + p + "</svg>"; }
+  var IC = {
+    clock: icon('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+    thumb: icon('<path d="M7 11v9H4v-9h3z"/><path d="M7 11l4-7c1.6 0 2.6 1.1 2.3 2.7L12.8 9H19a2 2 0 0 1 2 2.3l-1 6.5a2 2 0 0 1-2 1.7H7"/>'),
+    tag: icon('<path d="M3 12V4h8l10 10-8 8L3 12z"/><circle cx="7.5" cy="8.5" r="1"/>'),
+    bookmark: icon('<path d="M6 3h12v18l-6-4.5L6 21z"/>'),
+    share: icon('<circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8 11l8-4M8 13l8 4"/>'),
+    bolt: icon('<path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z"/>'),
+    back: icon('<path d="M15 5l-7 7 7 7"/>'),
+    plus: icon('<path d="M12 5v14M5 12h14"/>'),
+    video: icon('<rect x="3" y="6" width="13" height="12" rx="1.5"/><path d="M16 10.5l5-3v9l-5-3"/>')
+  };
+
+  /* decorative plate used when a recipe has no photo */
+  function plate(w, h, cx, cy, r, par) {
+    var dots = "";
+    for (var i = 0; i < 14; i++) {
+      var a = (i / 14) * Math.PI * 2;
+      dots += '<circle cx="' + (cx + Math.cos(a) * r * 0.9).toFixed(1) + '" cy="' + (cy + Math.sin(a) * r * 0.9).toFixed(1) + '" r="' + (r * 0.035).toFixed(1) + '" fill="var(--p-dot)"/>';
+    }
+    return '<svg viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="' + par + '" aria-hidden="true"><rect width="' + w + '" height="' + h + '" fill="var(--p-bg)"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="var(--p-dish)"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 0.72).toFixed(1) + '" fill="none" stroke="var(--p-ring)" stroke-width="' + (r * 0.025).toFixed(1) + '"/>' + dots + "</svg>";
+  }
+  var PLATE_CARD = plate(262, 182, 131, 91, 62, "xMidYMid slice");
+  var PLATE_HERO = plate(1200, 410, 880, 205, 170, "xMaxYMid slice");
+
+  function hasImg(r) { return r && typeof r.image === "string" && /^data:image\//.test(r.image); }
+  function thumb(r) { return hasImg(r) ? '<img src="' + r.image + '" alt="' + esc(pick(r, "title")) + '">' : PLATE_CARD; }
+
+  function mins(m) {
+    m = +m; if (!m) return "";
+    if (ar()) {
+      if (m < 60) return m + " دقيقة";
+      var ha = Math.floor(m / 60), ra = m % 60;
+      return ha + " ساعة" + (ra ? " و" + ra + " دقيقة" : "");
+    }
+    if (m < 60) return m + " minutes";
+    var h = Math.floor(m / 60), r = m % 60;
+    return h + " hr" + (r ? " " + r + " min" : "");
+  }
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso); if (isNaN(d)) return "";
+    try { return d.toLocaleDateString(ar() ? "ar-SA-u-ca-gregory-nu-latn" : "en-US", { month: "short", day: "numeric", year: "numeric" }); }
+    catch (e) { return d.toDateString(); }
+  }
+  function hue(s) { var h = 0; s = String(s || "?"); for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h; }
+  function initial(s) { s = String(s || "").trim(); return s ? s.charAt(0).toUpperCase() : "E"; }
+
+  function sorted() {
+    return state.recipes.slice().sort(function (a, b) { return String(b.createdAt || "").localeCompare(String(a.createdAt || "")); });
+  }
+  function filtered() {
+    var q = state.q.trim().toLowerCase();
+    return sorted().filter(function (r) {
+      if (state.cat && r.category !== state.cat) return false;
+      if (state.cuisine && r.cuisine !== state.cuisine) return false;
+      if (state.fav && !state.favs[r.id]) return false;
+      if (!q) return true;
+      var hay = [r.title, r.titleAr, r.summary, r.summaryAr, r.category, catLabel(r.category), r.cuisine, cuisineLabel(r.cuisine), CUISINE_AR[r.cuisine] || "", (r.ingredients || []).join(" "), (r.ingredientsAr || []).join(" ")].join(" ").toLowerCase();
+      return hay.indexOf(q) !== -1;
+    });
+  }
+  function ytId(u) {
+    u = String(u || "").trim(); if (!u) return "";
+    var m = u.match(/(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(u) ? u : "");
+  }
+  function ytUrl(id) { return "https://www.youtube.com/watch?v=" + id; }
+  function parseVideo(raw) {
+    raw = String(raw || "").trim(); if (!raw) return null;
+    var id = ytId(raw); if (id) return { url: ytUrl(id), kind: "YouTube" };
+    var u; try { u = new URL(/^https?:\/\//i.test(raw) ? raw : "https://" + raw); } catch (e) { return null; }
+    if (/(^|\.)tiktok\.com$/i.test(u.hostname) && u.pathname.length > 1) return { url: "https://" + u.hostname.toLowerCase() + u.pathname, kind: "TikTok" };
+    return null;
+  }
+  function videoOf(r) { return r ? parseVideo(r.video || (r.youtube ? ytUrl(r.youtube) : "")) : null; }
+  function allCuisines() {
+    var seen = {}, out = [];
+    CUISINES.concat(state.recipes.map(function (r) { return r.cuisine || ""; })).forEach(function (c) { if (c && !seen[c.toLowerCase()]) { seen[c.toLowerCase()] = 1; out.push(c); } });
+    return out.sort(function (a, b) { return cuisineLabel(a).localeCompare(cuisineLabel(b), ar() ? "ar" : "en"); });
+  }
+  function hasLock() { return !!(state.lock && state.lock.hash); }
+  function canPost() {
+    if (!state.checked || !state.canWrite) return false;
+    if (state.mode !== "db") return true;
+    return state.lockLoaded && (!hasLock() || state.unlocked);
+  }
+  function find(id) { for (var i = 0; i < state.recipes.length; i++) if (state.recipes[i].id === id) return state.recipes[i]; return null; }
+
+  /* favorites and text size (per viewer) */
+  try { state.favs = JSON.parse(lsGet("eh-favs") || "{}") || {}; } catch (e) { state.favs = {}; }
+  state.author = lsGet("eh-author") || "";
+  state.fs = parseInt(lsGet("eh-fs"), 10); if (!(state.fs >= 0 && state.fs < FS_LEVELS.length)) state.fs = 1;
+  function saveFavs() { lsSet("eh-favs", JSON.stringify(state.favs)); }
+
+  /* ---------- markup builders ---------- */
+  function byline(r) {
+    var name = r.author || "Eat@Home";
+    return '<div class="byline"><span class="av" style="background:hsl(' + hue(name) + ' 60% 80%)">' + esc(initial(name)) + '</span>' +
+      '<div><div class="by-name" dir="auto">' + esc(name) + '</div><div class="by-date">' + esc(fmtDate(r.createdAt)) + '</div></div>' +
+      '<div class="actions">' +
+      '<button class="icon-btn" type="button" data-share="' + esc(r.id) + '" aria-label="' + esc(t("shareAria")) + '">' + IC.share + '</button>' +
+      '<button class="icon-btn" type="button" data-fav="' + esc(r.id) + '" aria-pressed="' + (state.favs[r.id] ? "true" : "false") + '" aria-label="' + esc(t("favAria")) + '">' + IC.bookmark + '</button>' +
+      '</div></div>';
+  }
+  function metaHtml(r, withVideoFirst, withCat) {
+    var m = mins(r.minutes);
+    return '<div class="meta">' + (withVideoFirst && videoOf(r) ? "<span>" + IC.video + esc(t("video")) + "</span>" : "") +
+      (m ? "<span>" + IC.clock + esc(m) + "</span>" : "") +
+      (r.level ? "<span>" + IC.thumb + esc(levelLabel(r.level)) + "</span>" : "") +
+      (withCat && r.category ? "<span>" + IC.tag + esc(catLabel(r.category)) + "</span>" : "") +
+      (r.cuisine ? "<span>" + IC.tag + esc(cuisineLabel(r.cuisine)) + "</span>" : "") +
+      (!withVideoFirst && videoOf(r) ? "<span>" + IC.video + esc(t("video")) + "</span>" : "") + "</div>";
+  }
+  function card(r) {
+    var sum = pick(r, "summary");
+    return '<article class="card"><a class="card-img" href="#recipe-' + esc(r.id) + '" tabindex="-1" aria-hidden="true">' + thumb(r) +
+      (r.popular ? '<span class="badge">' + IC.bolt + esc(t("popular")) + "</span>" : "") + "</a>" +
+      metaHtml(r, false, false) + '<h3><a href="#recipe-' + esc(r.id) + '" dir="auto">' + esc(pick(r, "title")) + "</a></h3>" +
+      (sum ? '<p class="excerpt" dir="auto">' + esc(sum) + "</p>" : "") + byline(r) + "</article>";
+  }
+  function addButton(label) { return '<button class="add" type="button" data-add>' + IC.plus + esc(label || t("addRecipe")) + "</button>"; }
+
+  function hero(r) {
+    if (!r) {
+      var mine = canPost();
+      return '<section class="hero"><div class="hero-media">' + PLATE_HERO + '</div><div class="wrap hero-inner"><div class="hero-card">' +
+        '<div class="meta"><span>' + IC.tag + "Eat@Home</span></div>" +
+        "<h1>" + esc(mine ? t("heroMineTitle") : t("heroPubTitle")) + "</h1>" +
+        '<p class="lead">' + esc(mine ? t("heroMineLead") : t("heroPubLead")) + "</p>" +
+        (mine ? addButton(t("addFirst")) : "") + "</div></div></section>";
+    }
+    var sum = pick(r, "summary");
+    return '<section class="hero"><div class="hero-media">' + (hasImg(r) ? '<img src="' + r.image + '" alt="">' : PLATE_HERO) + '</div><div class="wrap hero-inner"><article class="hero-card">' +
+      metaHtml(r, true, true) +
+      '<h1><a href="#recipe-' + esc(r.id) + '" dir="auto">' + esc(pick(r, "title")) + "</a></h1>" +
+      '<p class="lead" dir="auto">' + esc(sum) + "</p>" + byline(r) + "</article></div></section>";
+  }
+
+  function gridOrEmpty(list, emptyTitle, emptyText, showAdd) {
+    if (list.length) return '<div class="grid">' + list.map(card).join("") + "</div>";
+    return '<div class="empty"><h3>' + esc(emptyTitle) + "</h3><p>" + esc(emptyText) + "</p>" + (showAdd && canPost() ? addButton(t("addA")) : "") + "</div>";
+  }
+
+  function vHome() {
+    var all = sorted(), first = all[0] || null, rest = all.slice(1, 7);
+    var out = hero(first);
+    out += '<div class="wrap">';
+    if (!all.length) {
+      out += '<div class="section"><div class="empty"><h3>' + esc(t("noRecipes")) + "</h3><p>" +
+        esc(canPost() ? t("noRecipesMine") : t("noRecipesPub")) +
+        "</p>" + (canPost() ? addButton(t("addA")) : "") + "</div></div>";
+    } else if (rest.length) {
+      out += '<section class="section"><div class="grid">' + rest.map(card).join("") + '</div><p class="all"><a class="more" href="#recipes">' + esc(t("allRecipes")) + "</a></p></section>";
+    }
+    out += localNote() + "</div>";
+    return out;
+  }
+  function localNote() {
+    return state.checked && state.mode === "local" && state.canWrite ? '<p class="note">' + esc(t("localNote")) + "</p>" : "";
+  }
+
+  function vRecipes() {
+    var counts = {}; state.recipes.forEach(function (r) { counts[r.category] = (counts[r.category] || 0) + 1; });
+    var chips = '<button class="chip" type="button" data-chip="" aria-pressed="' + (!state.cat && !state.cuisine) + '">' + esc(t("all")) + " (" + state.recipes.length + ")</button>";
+    CATS.forEach(function (c) { if (counts[c] || state.cat === c) chips += '<button class="chip" type="button" data-chip="' + esc(c) + '" aria-pressed="' + (state.cat === c) + '">' + esc(catLabel(c)) + " (" + (counts[c] || 0) + ")</button>"; });
+    var cc = {}; state.recipes.forEach(function (r) { if (r.cuisine) cc[r.cuisine] = (cc[r.cuisine] || 0) + 1; });
+    var cchips = Object.keys(cc).sort(function (a, b) { return cuisineLabel(a).localeCompare(cuisineLabel(b), ar() ? "ar" : "en"); }).map(function (c) { return '<button class="chip" type="button" data-cuisine="' + esc(c) + '" aria-pressed="' + (state.cuisine === c) + '">' + esc(cuisineLabel(c)) + " (" + cc[c] + ")</button>"; }).join("");
+    var list = filtered();
+    var title = state.fav ? t("yourFavs") : t("allRecipes");
+    var emptyT = state.recipes.length ? t("nothingMatches") : t("noRecipes");
+    var emptyP = state.recipes.length ? t("tryOther") : (canPost() ? t("addFirstListed") : t("noRecipesPub"));
+    return '<div class="wrap"><section class="section"><div class="section-head"><h2>' + esc(title) + "</h2>" +
+      (state.q ? '<span class="label" dir="auto">' + esc(t("searchPrefix") + state.q) + "</span>" : "") + '</div><div class="chips">' + chips + "</div>" + (cchips ? '<div class="chips cuisine"><span class="label chip-label">' + esc(t("cuisineLabel")) + "</span>" + cchips + "</div>" : "") +
+      gridOrEmpty(list, emptyT, emptyP, !state.recipes.length) + "</section>" + localNote() + "</div>";
+  }
+
+  function vCategories() {
+    var cc = {}; state.recipes.forEach(function (r) { if (r.cuisine) cc[r.cuisine] = (cc[r.cuisine] || 0) + 1; });
+    var cu = allCuisines().map(function (c) {
+      var n = cc[c] || 0;
+      return '<button class="tile" type="button" data-cuisine="' + esc(c) + '"><b>' + esc(cuisineLabel(c)) + "</b><small>" + esc(nRecipes(n)) + "</small></button>";
+    }).join("");
+    return '<div class="wrap"><section class="section"><div class="section-head"><h2>' + esc(t("categories")) + '</h2></div><div class="tiles">' + cu + "</div></section></div>";
+  }
+
+  function vAbout() {
+    var n = state.recipes.length;
+    var cu = {}; state.recipes.forEach(function (r) { if (r.cuisine) cu[r.cuisine] = 1; });
+    return '<div class="wrap about"><section class="section"><div class="section-head"><h2>' + esc(t("aboutTitle")) + "</h2></div>" +
+      "<p>" + esc(t("aboutText")) + "</p>" +
+      '<div class="stats"><div><b>' + n + "</b><span>" + esc(n === 1 ? t("statRecipe") : t("statRecipes")) + "</span></div><div><b>" + Object.keys(cu).length + "</b><span>" + esc(t("statCuisines")) + "</span></div></div></section></div>";
+  }
+
+  function vRecipe(id) {
+    var r = find(id);
+    if (!r) {
+      return '<div class="wrap"><section class="detail"><a class="crumb" href="#recipes">' + IC.back + esc(t("allRecipes")) + '</a><div class="empty"><h3>' + esc(state.checked ? t("notFound") : t("opening")) + "</h3><p>" +
+        esc(state.checked ? t("notFoundText") : t("oneMoment")) + "</p></div></section></div>";
+    }
+    var ing = pickList(r, "ingredients").map(function (x) { return '<li><label><input type="checkbox"><span dir="auto">' + esc(x) + "</span></label></li>"; }).join("");
+    var steps = pickList(r, "steps").map(function (x) { return '<li><span dir="auto">' + esc(x) + "</span></li>"; }).join("");
+    var owner = "";
+    if (canPost()) {
+      owner = '<div class="owner-bar"><button class="ghost" type="button" data-edit="' + esc(r.id) + '">' + esc(t("editRecipe")) + "</button>" +
+        (state.confirmDel === r.id ? '<button class="ghost danger" type="button" data-del="' + esc(r.id) + '">' + esc(t("confirmDel")) + '</button><button class="ghost" type="button" data-canceldel>' + esc(t("keepIt")) + "</button>" :
+          '<button class="ghost danger" type="button" data-del="' + esc(r.id) + '">' + esc(t("del")) + "</button>") + "</div>";
+    }
+    var sum = pick(r, "summary"), v = videoOf(r);
+    return '<div class="wrap"><article class="detail"><a class="crumb" href="#recipes">' + IC.back + esc(t("allRecipes")) + "</a>" +
+      (!hasOwnLang(r) ? '<p class="note tr">' + esc(t("onlyIn")) + "</p>" : "") +
+      metaHtml(r, false, true) +
+      '<h1 dir="auto">' + esc(pick(r, "title")) + "</h1>" + byline(r) +
+      (hasImg(r) ? '<div class="detail-img"><img src="' + r.image + '" alt="' + esc(pick(r, "title")) + '"></div>' : "") +
+      (sum ? '<p class="detail-lead" dir="auto">' + esc(sum) + "</p>" : "") +
+      (v ? '<a class="video" href="' + esc(v.url) + '" target="_blank" rel="noopener noreferrer"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span><span><b>' + esc(t("watch")) + "</b><small>" + esc(t("opensOn") + v.kind) + "</small></span></a>" : "") +
+      (v ? '<p class="video-url">' + esc(t("videoFallback")) + ' <button class="ghost" type="button" data-copyurl="' + esc(v.url) + '">' + esc(t("copyLink")) + "</button></p>" : "") +
+      '<div class="textsize" role="group" aria-label="' + esc(t("textSizeAria")) + '"><span class="label">' + esc(t("textSize")) + "</span>" +
+      '<button class="ghost" type="button" data-fs="down" aria-label="' + esc(t("smaller")) + '">' + esc(t("aMinus")) + "</button>" +
+      '<button class="ghost" type="button" data-fs="reset" aria-label="' + esc(t("normal")) + '">' + esc(t("aNorm")) + "</button>" +
+      '<button class="ghost" type="button" data-fs="up" aria-label="' + esc(t("larger")) + '">' + esc(t("aPlus")) + "</button></div>" +
+      '<div class="cols" style="--fs:' + FS_LEVELS[state.fs] + '">' +
+      (ing ? '<aside class="box"><h2>' + esc(t("ingredients")) + '</h2><ul class="ing">' + ing + "</ul></aside>" : "<div></div>") +
+      '<div class="steps-wrap">' + (steps ? "<h2>" + esc(t("method")) + '</h2><ol class="steps">' + steps + "</ol>" : "") + "</div></div>" + owner + "</article></div>";
+  }
+
+  /* ---------- routing + rendering ---------- */
+  function route() {
+    var h = location.hash.replace(/^#/, "");
+    if (h.indexOf("recipe-") === 0) return { v: "recipe", id: h.slice(7) };
+    if (h === "categories" || h === "recipes" || h === "about") return { v: h };
+    return { v: "home" };
+  }
+  function renderView() {
+    var rt = route();
+    view.innerHTML = rt.v === "recipe" ? vRecipe(rt.id) : rt.v === "recipes" ? vRecipes() : rt.v === "categories" ? vCategories() : rt.v === "about" ? vAbout() : vHome();
+    document.querySelectorAll("#nav a").forEach(function (a) {
+      var on = a.getAttribute("data-v") === (rt.v === "recipe" ? "recipes" : rt.v);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    renderChrome();
+  }
+  function renderChrome() {
+    var root = document.documentElement;
+    root.setAttribute("lang", state.lang); root.setAttribute("dir", ar() ? "rtl" : "ltr");
+    document.querySelectorAll("#nav a").forEach(function (a) {
+      var k = a.getAttribute("data-v");
+      a.innerHTML = esc(t(k)) + (k === "recipes" ? '<span class="star" aria-hidden="true"></span>' : "");
+    });
+    var q = $("#q"); q.placeholder = t("searchPh"); q.setAttribute("aria-label", t("searchAria"));
+    $("#go-btn").setAttribute("aria-label", t("searchBtn"));
+    $("#cat-select").setAttribute("aria-label", t("cuisineAria"));
+    var lb = $("#lang-btn"); lb.textContent = ar() ? "English" : "العربية"; lb.setAttribute("lang", ar() ? "en" : "ar"); lb.setAttribute("title", t("switchTo")); lb.setAttribute("aria-label", t("switchTo"));
+    $("#fav-label").textContent = t("favorites");
+    $("#add-btn").innerHTML = IC.plus + esc(t("addRecipe"));
+    $("#foot-brand").textContent = t("footBrand");
+    var n = Object.keys(state.favs).filter(function (k) { return state.favs[k] && find(k); }).length;
+    $("#fav-count").textContent = "(" + n + ")";
+    $("#fav-btn").setAttribute("aria-pressed", state.fav ? "true" : "false");
+    var isDb = state.checked && state.mode === "db" && state.canWrite;
+    var locked = isDb && (!state.lockLoaded || (hasLock() && !state.unlocked));
+    $("#add-btn").hidden = !canPost();
+    var ab = $("#admin-btn"); ab.textContent = isDb && !locked ? t("adminIn") : t("adminLogin"); ab.setAttribute("data-on", isDb && !locked ? "1" : "0");
+    var tg = $("#admin-tag"); tg.hidden = !isDb;
+    tg.innerHTML = '<i aria-hidden="true"></i>' + esc(isDb && state.lockLoaded && hasLock() && !state.unlocked ? t("adminLocked") : t("admin"));
+    buildSelect();
+    $("#foot-count").textContent = nRecipes(state.recipes.length);
+  }
+  var lastSel = "";
+  function buildSelect() {
+    var s = $("#cat-select");
+    var html = '<option value="">' + esc(t("allCuisines")) + "</option>" +
+      allCuisines().map(function (c) { return '<option value="cui:' + esc(c) + '">' + esc(cuisineLabel(c)) + "</option>"; }).join("");
+    if (html !== lastSel) { s.innerHTML = html; lastSel = html; }
+    syncSelect();
+  }
+  function syncSelect() {
+    $("#cat-select").value = state.cuisine ? "cui:" + state.cuisine : "";
+  }
+
+  function go(hash) { if (location.hash === hash) renderView(); else location.hash = hash; }
+  window.addEventListener("hashchange", function () { state.confirmDel = ""; renderView(); window.scrollTo(0, 0); });
+
+  /* language switch */
+  $("#lang-btn").addEventListener("click", function () {
+    state.lang = ar() ? "en" : "ar"; lsSet("eh-lang", state.lang);
+    renderView();
+  });
+
+  /* search */
+  $("#search-form").addEventListener("submit", function (e) { e.preventDefault(); go("#recipes"); });
+  $("#q").addEventListener("input", function (e) { state.q = e.target.value; if (route().v === "recipes") renderView(); else go("#recipes"); });
+  $("#cat-select").addEventListener("change", function (e) {
+    var v = e.target.value; state.cat = ""; state.cuisine = ""; state.fav = false;
+    if (v.indexOf("cui:") === 0) state.cuisine = v.slice(4);
+    go("#recipes");
+  });
+  $("#fav-btn").addEventListener("click", function () { state.fav = !state.fav; if (state.fav) { state.cat = ""; state.cuisine = ""; syncSelect(); } go("#recipes"); });
+  $("#add-btn").addEventListener("click", function () { openForm(null); });
+
+  /* toast */
+  var tt;
+  function toast(msg) { toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toastEl.hidden = true; }, 2600); }
+
+  function copyText(url) {
+    function fb() { toast(t("copyThis") + "⁦" + url + "⁩"); }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function () { toast(t("linkCopied")); }, fb);
+      else fb();
+    } catch (e) { fb(); }
+  }
+  function shareLink(id) { copyText(location.href.split("#")[0] + "#recipe-" + id); }
+
+  /* delegated clicks */
+  document.addEventListener("click", function (e) {
+    var t0 = e.target.closest("[data-fav],[data-share],[data-add],[data-edit],[data-del],[data-canceldel],[data-cat],[data-cuisine],[data-chip],[data-copyurl],[data-fs]");
+    if (!t0) return;
+    if (t0.hasAttribute("data-fav")) {
+      var id = t0.getAttribute("data-fav");
+      if (state.favs[id]) delete state.favs[id]; else state.favs[id] = 1;
+      saveFavs(); renderView();
+    } else if (t0.hasAttribute("data-share")) { shareLink(t0.getAttribute("data-share")); }
+    else if (t0.hasAttribute("data-add")) { openForm(null); }
+    else if (t0.hasAttribute("data-copyurl")) { copyText(t0.getAttribute("data-copyurl")); }
+    else if (t0.hasAttribute("data-fs")) {
+      var d = t0.getAttribute("data-fs");
+      state.fs = d === "up" ? Math.min(FS_LEVELS.length - 1, state.fs + 1) : d === "down" ? Math.max(0, state.fs - 1) : 1;
+      lsSet("eh-fs", String(state.fs));
+      var cols = $(".cols"); if (cols) cols.style.setProperty("--fs", FS_LEVELS[state.fs]);
+    }
+    else if (t0.hasAttribute("data-edit")) { openForm(find(t0.getAttribute("data-edit"))); }
+    else if (t0.hasAttribute("data-canceldel")) { state.confirmDel = ""; renderView(); }
+    else if (t0.hasAttribute("data-del")) {
+      var did = t0.getAttribute("data-del");
+      if (state.confirmDel !== did) { state.confirmDel = did; renderView(); return; }
+      removeRecipe(did);
+    } else if (t0.hasAttribute("data-cat")) { state.cat = t0.getAttribute("data-cat"); state.cuisine = ""; state.fav = false; syncSelect(); go("#recipes"); }
+    else if (t0.hasAttribute("data-cuisine")) { state.cuisine = t0.getAttribute("data-cuisine"); if (route().v === "categories") state.cat = ""; state.fav = false; syncSelect(); go("#recipes"); }
+    else if (t0.hasAttribute("data-chip")) { var cv = t0.getAttribute("data-chip"); state.cat = cv; if (!cv) state.cuisine = ""; syncSelect(); renderView(); }
+  });
+
+  /* ---------- storage ---------- */
+  function loadLocal() {
+    try { var a = JSON.parse(lsGet("eh-recipes") || "[]"); if (Array.isArray(a)) state.recipes = a; } catch (e) { state.recipes = []; }
+  }
+  function persistLocal() { return lsSet("eh-recipes", JSON.stringify(state.recipes)); }
+
+  function persist(id, data) {
+    if (state.mode === "db") return state.db.collection("recipes").doc(id).set(data);
+    data.id = id;
+    var i = state.recipes.findIndex(function (r) { return r.id === id; });
+    if (i >= 0) state.recipes[i] = data; else state.recipes.push(data);
+    if (!persistLocal()) return Promise.reject(new Error(t("noRoom")));
+    return Promise.resolve();
+  }
+  function removeRecipe(id) {
+    var p;
+    if (state.mode === "db") p = state.db.collection("recipes").doc(id).delete();
+    else { state.recipes = state.recipes.filter(function (r) { return r.id !== id; }); persistLocal(); p = Promise.resolve(); }
+    p.then(function () { state.confirmDel = ""; toast(t("deleted")); go("#recipes"); }, function () { toast(t("deleteFail")); });
+  }
+
+  /* ---------- form ---------- */
+  function lines(s) { return String(s || "").split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function newId() { return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+  function pairInput(id, label, en, arv, rows, phEn, phAr, max) {
+    var tag = rows ? "textarea" : "input";
+    function ctl(cid, val, dir, lang, ph) {
+      return rows
+        ? '<textarea id="' + cid + '" rows="' + rows + '" dir="' + dir + '" lang="' + lang + '" placeholder="' + esc(ph) + '"' + (max ? ' maxlength="' + max + '"' : "") + ">" + esc(val) + "</textarea>"
+        : '<input id="' + cid + '" type="text" dir="' + dir + '" lang="' + lang + '" value="' + esc(val) + '" placeholder="' + esc(ph) + '"' + (max ? ' maxlength="' + max + '"' : "") + ">";
+    }
+    return '<div class="field"><span class="lbl">' + esc(label) + '</span><div class="pair">' +
+      '<div><label class="sub" for="' + id + '" lang="en" dir="ltr">English</label>' + ctl(id, en, "ltr", "en", phEn) + "</div>" +
+      '<div><label class="sub" for="' + id + '-ar" lang="ar" dir="rtl">العربية</label>' + ctl(id + "-ar", arv, "rtl", "ar", phAr) + "</div></div>" +
+      (arguments[8] ? "<small>" + esc(arguments[8]) + "</small>" : "") + "</div>";
+  }
+
+  function openForm(r) {
+    state.editing = r; state.img = r && hasImg(r) ? r.image : ""; state.saving = false;
+    var v = r || { title: "", titleAr: "", summary: "", summaryAr: "", category: "Dinner", minutes: 30, level: "Easy", cuisine: "", ingredients: [], ingredientsAr: [], steps: [], stepsAr: [], author: state.author, popular: false };
+    function opts(arr, cur, lab) { return arr.map(function (x) { return '<option value="' + esc(x) + '"' + (x === cur ? " selected" : "") + ">" + esc(lab(x)) + "</option>"; }).join(""); }
+    var trbar = state.sample ? '<div class="trbar"><p>' + esc(t("trHint")) + '</p><div class="btns"><button class="ghost" type="button" data-tr="en-ar">' + esc(t("trToAr")) + '</button><button class="ghost" type="button" data-tr="ar-en">' + esc(t("trToEn")) + '</button><span class="label" id="tr-status" role="status"></span></div></div>' : "";
+    modal.innerHTML = '<div class="panel" role="dialog" aria-modal="true" aria-labelledby="f-head"><h2 id="f-head">' + esc(r ? t("formEdit") : t("formAdd")) + "</h2>" +
+      '<form id="recipe-form" novalidate>' + trbar +
+      pairInput("f-title", t("fTitle"), v.title, v.titleAr || "", 0, t("phTitleEn"), t("phTitleAr"), 140) +
+      '<div class="row"><div class="field"><label for="f-cat">' + esc(t("fCat")) + '</label><select id="f-cat">' + opts(CATS, v.category, catLabel) + "</select></div>" +
+      '<div class="field"><label for="f-min">' + esc(t("fMin")) + '</label><input id="f-min" type="number" min="1" max="1440" value="' + esc(v.minutes || "") + '"></div>' +
+      '<div class="field"><label for="f-level">' + esc(t("fLevel")) + '</label><select id="f-level">' + opts(LEVELS, v.level, levelLabel) + "</select></div></div>" +
+      '<div class="field"><label for="f-cui">' + esc(t("fCui")) + '</label><input id="f-cui" type="text" list="cui-list" value="' + esc(cuisineLabel(v.cuisine || "")) + '" placeholder="' + esc(t("fCuiPh")) + '" maxlength="40" autocomplete="off"><datalist id="cui-list">' + allCuisines().map(function (c) { return '<option value="' + esc(cuisineLabel(c)) + '"></option>'; }).join("") + "</datalist><small>" + esc(t("fCuiHint")) + "</small></div>" +
+      pairInput("f-sum", t("fSum"), v.summary || "", v.summaryAr || "", 3, t("phSumEn"), t("phSumAr"), 400) +
+      pairInput("f-ing", t("fIng"), (v.ingredients || []).join("\n"), (v.ingredientsAr || []).join("\n"), 6, S.phIngEn[0], S.phIngAr[0], 0, t("fIngHint")) +
+      pairInput("f-steps", t("fSteps"), (v.steps || []).join("\n"), (v.stepsAr || []).join("\n"), 6, S.phStepsEn[0], S.phStepsAr[0], 0, t("fStepsHint")) +
+      '<div class="field"><label for="f-yt">' + esc(t("fVideo")) + '</label><input id="f-yt" type="text" inputmode="url" dir="ltr" value="' + esc(videoOf(v) ? videoOf(v).url : "") + '" placeholder="' + esc(t("fVideoPh")) + '" autocomplete="off"><small>' + esc(t("fVideoHint")) + "</small></div>" +
+      '<div class="field"><span class="lbl">' + esc(t("fPhoto")) + '</span><div class="photo" id="photo-box"></div><small>' + esc(t("fPhotoHint")) + "</small></div>" +
+      '<div class="row2"><div class="field"><label for="f-author">' + esc(t("fByline")) + '</label><input id="f-author" type="text" dir="auto" value="' + esc(v.author) + '" maxlength="60" placeholder="' + esc(t("fBylinePh")) + '"></div><div></div></div>' +
+      '<label class="check"><input id="f-pop" type="checkbox"' + (v.popular ? " checked" : "") + "> " + esc(t("fPop")) + "</label>" +
+      '<p class="err" id="f-err" role="alert"></p>' +
+      '<div class="form-foot"><button class="add" type="submit" id="f-save">' + esc(t("saveRecipe")) + '</button><button class="ghost" type="button" id="f-cancel">' + esc(t("cancel")) + "</button></div>" +
+      "</form></div>";
+    modal.hidden = false;
+    drawPhoto();
+    $("#f-cancel").addEventListener("click", closeForm);
+    $("#recipe-form").addEventListener("submit", submitForm);
+    $("#f-title").focus();
+  }
+  function closeForm() { modal.hidden = true; modal.innerHTML = ""; state.editing = null; }
+  modal.addEventListener("mousedown", function (e) { if (e.target === modal) closeForm(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeForm(); });
+
+  function drawPhoto() {
+    var box = $("#photo-box"); if (!box) return;
+    box.innerHTML = (state.img ? '<img src="' + state.img + '" alt="' + esc(t("selPhoto")) + '">' : "") +
+      '<input id="f-img" type="file" accept="image/*" aria-label="' + esc(t("choosePhoto")) + '">' +
+      (state.img ? '<button class="ghost" type="button" id="f-noimg">' + esc(t("removePhoto")) + "</button>" : "");
+    $("#f-img").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      shrink(f).then(function (d) { state.img = d; drawPhoto(); }, function (er) { $("#f-err").textContent = (er && er.message) || t("errPhotoRead"); });
+    });
+    var rm = $("#f-noimg"); if (rm) rm.addEventListener("click", function () { state.img = ""; drawPhoto(); });
+  }
+  function shrink(file) {
+    return new Promise(function (res, rej) {
+      var fr = new FileReader();
+      fr.onerror = function () { rej(new Error(t("errPhotoRead"))); };
+      fr.onload = function () {
+        var im = new Image();
+        im.onerror = function () { rej(new Error(t("errPhotoType"))); };
+        im.onload = function () {
+          var sizes = [1000, 800, 640], out = "";
+          for (var s = 0; s < sizes.length; s++) {
+            var k = Math.min(1, sizes[s] / Math.max(im.width, im.height));
+            var c = document.createElement("canvas"); c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k));
+            c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+            for (var q = 0.8; q >= 0.5; q -= 0.1) { out = c.toDataURL("image/jpeg", q); if (out.length < 190000) return res(out); }
+          }
+          rej(new Error(t("errPhotoBig")));
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+
+  /* translate one language into the other with Claude (page owner only, on a click) */
+  function doTranslate(dir) {
+    if (!state.sample || state.translating) return;
+    var from = dir === "en-ar" ? "" : "-ar", to = dir === "en-ar" ? "-ar" : "";
+    var g = function (id) { return $("#" + id).value; };
+    var src = { title: g("f-title" + from).trim(), summary: g("f-sum" + from).trim(), ingredients: lines(g("f-ing" + from)), steps: lines(g("f-steps" + from)) };
+    var st = $("#tr-status");
+    if (!src.title && !src.summary && !src.ingredients.length && !src.steps.length) { st.textContent = dir === "en-ar" ? t("trNeedEn") : t("trNeedAr"); return; }
+    state.translating = true; st.textContent = t("trBusy");
+    document.querySelectorAll("[data-tr]").forEach(function (b) { b.disabled = true; });
+    var names = dir === "en-ar" ? ["English", "Arabic"] : ["Arabic", "English"];
+    var prompt = "Translate this home-cooking recipe from " + names[0] + " to " + names[1] + ". Reply with only a JSON object with exactly these keys: title (string), summary (string), ingredients (array of strings), steps (array of strings). Keep the same number of items, in the same order, in ingredients and steps. Keep quantities and units correct, keep an empty string empty, and use natural everyday wording for a home recipe blog" + (dir === "en-ar" ? " (clear Modern Standard Arabic, Western digits 0-9)" : "") + ".\n\nRecipe:\n" + JSON.stringify(src);
+    state.sample.json(prompt, { modelTier: "default" }).then(function (out) {
+      if (!out || typeof out !== "object") throw { code: "invalid_json" };
+      var list = function (a) { return Array.isArray(a) ? a.map(function (x) { return String(x); }).join("\n") : ""; };
+      if ($("#f-title" + to)) {
+        $("#f-title" + to).value = String(out.title || "");
+        $("#f-sum" + to).value = String(out.summary || "");
+        $("#f-ing" + to).value = list(out.ingredients);
+        $("#f-steps" + to).value = list(out.steps);
+        var s2 = $("#tr-status"); if (s2) s2.textContent = t("trDone");
+      }
+    }).catch(function (e) {
+      var s2 = $("#tr-status"); if (!s2) return;
+      var c = e && e.code;
+      s2.textContent = c === "not_granted" || c === "sampling_disabled" || c === "not_declared" ? t("trDeclined") : c === "rate_limited" ? t("trRate") : t("trFail");
+    }).then(function () {
+      state.translating = false;
+      document.querySelectorAll("[data-tr]").forEach(function (b) { b.disabled = false; });
+    });
+  }
+
+  function submitForm(e) {
+    e.preventDefault();
+    if (state.saving) return;
+    var err = $("#f-err"); err.textContent = "";
+    var title = $("#f-title").value.trim(), titleAr = $("#f-title-ar").value.trim();
+    if (!title && !titleAr) { err.textContent = t("errTitle"); $("#f-title").focus(); return; }
+    var vidRaw = $("#f-yt").value.trim(), vid = parseVideo(vidRaw);
+    if (vidRaw && !vid) { err.textContent = t("errVideo"); $("#f-yt").focus(); return; }
+    var old = state.editing;
+    var data = {
+      title: title, titleAr: titleAr, category: $("#f-cat").value, cuisine: cuisineKey($("#f-cui").value), video: vid ? vid.url : "", minutes: parseInt($("#f-min").value, 10) || 0, level: $("#f-level").value,
+      summary: $("#f-sum").value.trim(), summaryAr: $("#f-sum-ar").value.trim(),
+      ingredients: lines($("#f-ing").value), ingredientsAr: lines($("#f-ing-ar").value),
+      steps: lines($("#f-steps").value), stepsAr: lines($("#f-steps-ar").value),
+      image: state.img || "", author: $("#f-author").value.trim(), popular: $("#f-pop").checked,
+      createdAt: old && old.createdAt ? old.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString()
+    };
+    var id = old ? old.id : newId();
+    state.author = data.author; lsSet("eh-author", data.author);
+    state.saving = true; $("#f-save").disabled = true;
+    persist(id, data).then(function () {
+      state.saving = false; closeForm(); toast(t("saved"));
+      if (state.mode === "local") renderView();
+      if (!old) go("#recipe-" + id); else renderView();
+    }, function (er) {
+      state.saving = false; var b = $("#f-save"); if (b) b.disabled = false;
+      var m = er && er.code === "quota_exceeded" ? t("errQuota") : (er && er.message) || t("errSave");
+      if ($("#f-err")) $("#f-err").textContent = m;
+    });
+  }
+
+  /* ---------- admin lock ---------- */
+  function b64(buf) { var a = new Uint8Array(buf), s = ""; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
+  function unb64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function derive(pw, salt, iter) {
+    if (!(window.crypto && crypto.subtle)) return Promise.reject(new Error(t("noCryptoCheck")));
+    return crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]).then(function (k) {
+      return crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: salt, iterations: iter }, k, 256);
+    });
+  }
+  function closeBtn() { return '<button class="ghost" type="button" data-aclose>' + esc(t("close")) + "</button>"; }
+  function openAdmin() {
+    var h = '<div class="panel" role="dialog" aria-modal="true" aria-labelledby="a-head"><h2 id="a-head">' + esc(t("adminTitle")) + "</h2>", focus = "";
+    if (state.mode !== "db" || !state.canWrite) {
+      h += '<p class="a-text">' + esc(state.mode !== "db" ? t("adminLocal") : t("adminNoAccess")) + '</p><div class="form-foot">' + closeBtn() + "</div>";
+    } else if (!state.lockLoaded) {
+      h += '<p class="a-text">' + esc(t("adminChecking")) + '</p><div class="form-foot">' + closeBtn() + "</div>";
+    } else if (hasLock() && !state.unlocked) {
+      h += '<form id="a-unlock" novalidate><div class="field"><label for="a-pw">' + esc(t("adminPw")) + '</label><input id="a-pw" type="password" autocomplete="current-password"></div><p class="err" id="a-err" role="alert"></p><div class="form-foot"><button class="add" type="submit">' + esc(t("unlock")) + '</button><button class="ghost" type="button" data-aclose>' + esc(t("cancel")) + "</button></div></form>";
+      focus = "#a-pw";
+    } else {
+      var has = hasLock();
+      h += '<p class="a-text">' + esc(has ? t("adminOpen") : t("adminNoPw")) + "</p>" +
+        '<form id="a-set" novalidate><div class="field"><label for="a-new">' + esc(has ? t("newPw") : t("pw")) + '</label><input id="a-new" type="password" autocomplete="new-password"><small>' + esc(t("pwHint")) + "</small></div>" +
+        '<div class="field"><label for="a-new2">' + esc(t("pwRepeat")) + '</label><input id="a-new2" type="password" autocomplete="new-password"></div><p class="err" id="a-err" role="alert"></p>' +
+        '<div class="form-foot"><button class="add" type="submit">' + esc(has ? t("changePw") : t("setPw")) + "</button>" +
+        (has ? '<button class="ghost" type="button" data-alock>' + esc(t("lockNow")) + '</button><button class="ghost danger" type="button" data-aremove>' + esc(t("removePw")) + "</button>" : "") +
+        closeBtn() + "</div></form>" +
+        '<p class="a-text" style="margin:22px 0 0">' + esc(t("pwNote")) + "</p>";
+      focus = "#a-new";
+    }
+    modal.innerHTML = h + "</div>"; modal.hidden = false;
+    var uf = $("#a-unlock"); if (uf) uf.addEventListener("submit", doUnlock);
+    var sf = $("#a-set"); if (sf) sf.addEventListener("submit", doSetPassword);
+    var f = focus ? $(focus) : $("[data-aclose]"); if (f) f.focus();
+  }
+  function doUnlock(e) {
+    e.preventDefault();
+    var er = $("#a-err"); er.textContent = "";
+    if (Date.now() < state.until) { er.textContent = t("tooMany"); return; }
+    var pw = $("#a-pw").value; if (!pw) { er.textContent = t("enterPw"); return; }
+    Promise.resolve().then(function () { return derive(pw, unb64(state.lock.salt), state.lock.iter || 200000); }).then(function (bits) {
+      if (b64(bits) === state.lock.hash) { state.fails = 0; state.unlocked = true; closeForm(); toast(t("tUnlocked")); renderView(); }
+      else { state.fails++; if (state.fails >= 5) { state.until = Date.now() + 30000; state.fails = 0; } er.textContent = t("wrongPw"); $("#a-pw").select(); }
+    }, function (x) { er.textContent = (x && x.message) || t("pwCheckFail"); });
+  }
+  function doSetPassword(e) {
+    e.preventDefault();
+    var er = $("#a-err"); er.textContent = "";
+    var p1 = $("#a-new").value, p2 = $("#a-new2").value;
+    if (p1.length < 6) { er.textContent = t("pwShort"); return; }
+    if (p1 !== p2) { er.textContent = t("pwMismatch"); return; }
+    if (!(window.crypto && crypto.getRandomValues)) { er.textContent = t("noCryptoSet"); return; }
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    derive(p1, salt, 200000).then(function (bits) {
+      return state.db.doc("settings/lock").set({ salt: b64(salt), hash: b64(bits), iter: 200000, updatedAt: new Date().toISOString() });
+    }).then(function () { state.unlocked = true; closeForm(); toast(t("tPwSaved")); renderView(); }, function (x) { er.textContent = (x && x.message) || t("pwSaveFail"); });
+  }
+  modal.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-aclose],[data-alock],[data-aremove],[data-tr]"); if (!b) return;
+    if (b.hasAttribute("data-tr")) doTranslate(b.getAttribute("data-tr"));
+    else if (b.hasAttribute("data-aclose")) closeForm();
+    else if (b.hasAttribute("data-alock")) { state.unlocked = false; closeForm(); toast(t("tLocked")); renderView(); }
+    else state.db.doc("settings/lock").delete().then(function () { state.lock = null; state.unlocked = false; closeForm(); toast(t("tPwRemoved")); renderView(); }, function () { var er = $("#a-err"); if (er) er.textContent = t("pwRemoveFail"); });
+  });
+  $("#admin-btn").addEventListener("click", openAdmin);
+  $("#admin-tag").addEventListener("click", openAdmin);
+
+  /* ---------- boot ---------- */
+  loadLocal();
+  renderView();
+
+  (async function () {
+    var db = null, user = null;
+    try { if (window.claude && window.claude.use) { db = await window.claude.use("db"); user = await window.claude.use("user"); } } catch (e) { db = null; }
+    if (!db) { state.mode = "local"; state.canWrite = true; state.checked = true; renderView(); return; }
+    state.mode = "db"; state.db = db; state.recipes = [];
+    try { state.canWrite = user ? await user.canEdit() : false; } catch (e) { state.canWrite = false; }
+    try { var me = user ? await user.me() : null; if (me && me.name && !state.author) state.author = me.name; } catch (e) {}
+    if (state.canWrite) { try { state.sample = await window.claude.use("sample"); } catch (e) { state.sample = null; } }
+    state.checked = true;
+    if (state.canWrite) {
+      db.doc("settings/lock").onSnapshot(function (snap) {
+        state.lock = snap.exists ? snap.data() : null; state.lockLoaded = true; renderView();
+      }, function () { renderView(); });
+    }
+    renderView();
+    db.collection("recipes").onSnapshot(function (snap) {
+      state.recipes = snap.docs.map(function (d) { var o = Object.assign({}, d.data()); o.id = d.id; return o; });
+      renderView();
+    }, function () { renderView(); });
+  })();
+})();
+</script>
+
+</body></html>
